@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+</head>
+<script>
+   
+$(document).ready(function(){
+   
+  $("#repo_table").hide()
+  $("#error").hide()
+    var name="coronasafe"
+    var repo_data='';
+    console.log(typeof(name))
+    $.ajax({ 
+             url: "https://api.github.com/users/"+name+"/repos", 
+            
+             success: function(result,error){
+                 var count=1;
+
+            $("#repo_table").show()
+                 $.each(result,function(key,value){
+                   
+                    repo_data += '<tr>';
+                    repo_data +='<td>'+count+'</td>' 
+                    repo_data += '<td> <a  href="repodata.html?name='+value.name+'" > ' + value.name+ '</a></td>'
+                    repo_data += '<td>'+value.open_issues_count+'</td>'
+                    repo_data += '<td><a href="'+value.html_url+'">'+value.html_url+'</a></td>'
+                    repo_data += '</tr>';
+                  count++;
+                 
+                 })
+                 $('#repo_table'
+                 ).append(repo_data);
+                
+             }, 
+                
+              error: function(){
+                  $("#repo_table").hide()
+                console.log("error")
+                $("#error").show()
+                
+               }
+            });
+           
+            
+})
+</script>
+<body>
+    <div id="error">Invalid Username</div>
+    <table id="repo_table">
+        <tr>
+            <th>#</th>
+            <th>  Repo Name</th>
+            <th>Open Issues</th>
+            <th>Repo link</th>
+        </tr>
+    </table>
+
+</body>
+</html>

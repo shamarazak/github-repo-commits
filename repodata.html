@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+      
+            $("#repo_table").hide()
+    var path = window.location.pathname;
+            var href = window.location.href;
+            $(document).ready(function(){
+                var URL = $(location).attr('href').split("=");
+                console.log(URL[1]);
+                var repo_data='';
+            console.log(URL[1]);
+            $.ajax({
+                url:"https://api.github.com/repos/coronasafe/"+URL[1]+"/commits",success:function(result,error){
+                    var count=1;
+                    $("#repo_table").show()
+            
+                 $.each(result,function(key,value){
+                   console.log(value)
+                   console.log(value)
+                    repo_data += '<tr>';
+                    repo_data +='<td>'+count+'</td>' 
+                    repo_data += '<td>'+ value.commit.committer.name+'</td>'
+                    repo_data += '<td>'+value.commit.message+'</td>'
+                    repo_data += '<td>'+value.commit.committer.date+'</td>'
+                    repo_data += '<td>'+value.commit.tree.url+'</td>'
+                    repo_data += '</tr>';
+                  count++;
+                 
+                 })
+                 $('#repo_table'
+                 ).append(repo_data);
+                
+
+                },
+                error:function(URL){
+                    $("#repo_table").hide()
+                    $("#empty").html(URL.responseJSON.message)
+                    console.log(URL)
+
+                }
+            })
+
+  
+        })
+    });
+    </script>
+</head>
+<body>
+    <div id="empty"></div>
+    <table id="repo_table">
+        <th>#</th>
+        <th>Commit Author</th>
+        <th>Message</th>
+        <th>Date</th>
+        <th>Commit Url</th>
+    </table>
+</body>
+</html>
